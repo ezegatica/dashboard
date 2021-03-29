@@ -83,7 +83,7 @@ export class Dashboard extends Component {
                                 return (
                                     <tr key={url._id}>
                                         <td><a href={url.destino}>{url.destino}</a></td>
-                                        <td><a href={`${process.env.REACT_APP_API_URL}${url.tag}`} target="_blank" rel="noreferrer">{process.env.REACT_APP_API_URL}/{url.tag}</a></td>
+                                        <td><a href={`${process.env.REACT_APP_API_URL}${url.tag}`} target="_blank" rel="noreferrer">{process.env.REACT_APP_API_URL}{url.tag}</a></td>
                                         <td>{url.conteo}</td>
                                         <td>
                                             <Button variant="success" onClick={() => this.copyShortToClipboard(url.tag)}>Copy</Button> {' '}
