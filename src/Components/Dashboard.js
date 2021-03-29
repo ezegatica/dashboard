@@ -83,7 +83,7 @@ export class Dashboard extends Component {
                                 return (
                                     <tr key={url._id}>
                                         <td><a href={url.destino}>{url.destino}</a></td>
-                                        <td><a href={`https://link.eze.wtf/${url.tag}`} target="_blank" rel="noreferrer">eze.wtf/{url.tag}</a></td>
+                                        <td><a href={`https://link.eze.wtf/${url.tag}`} target="_blank" rel="noreferrer">link.eze.wtf/{url.tag}</a></td>
                                         <td>{url.conteo}</td>
                                         <td>
                                             <Button variant="success" onClick={() => this.copyShortToClipboard(url.tag)}>Copy</Button> {' '}
