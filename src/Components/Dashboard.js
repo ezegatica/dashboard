@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import {
     Container, Form, Col, Button, Table
-    // Navbar, Nav, FormControl
+    , Navbar, Nav
 } from "react-bootstrap";
 // import { NavLink } from "react-router-dom";
 import axios from 'axios'
 import swal from 'sweetalert'
+
 export class Dashboard extends Component {
     state = {
         destino: '',
@@ -18,13 +19,14 @@ export class Dashboard extends Component {
             destino: this.state.destino,
             tag: this.state.tag
         })
+        this.setState({destino: '',tag:''})
         this.copyShortToClipboard(res.data.tag)
         swal("URL Creada", `${process.env.REACT_APP_API_URL}${res.data.tag}`, "success");
         this.getUrls()
 
     }
     getUrls = async () => {
-        const res = await axios.get(process.env.REACT_APP_API_URL+'url')
+        const res = await axios.get(process.env.REACT_APP_API_URL + 'url')
         this.setState({
             urls: res.data
         })
@@ -37,31 +39,37 @@ export class Dashboard extends Component {
     }
     deleteUrl = async (id) => {
         console.log(id);
-        await axios.delete(process.env.REACT_APP_API_URL+'url/'+id)
+        await axios.delete(process.env.REACT_APP_API_URL + 'url/' + id)
         this.getUrls()
+    }
+    logout = async () => {
+        await axios.get(process.env.REACT_APP_API_URL + 'auth/logout')
+        window.location.reload()
     }
     render() {
         return (
             <>
-                {/* <Navbar bg="dark" variant="dark">
+                <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="/">URL Shortener</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <NavLink className="nav-link" to="/">Home</NavLink>
+                        {/* <NavLink className="nav-link" to="/">Home</NavLink> */}
                     </Nav>
-                    <Form inline>
-                        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button variant="outline-info">Search</Button>
-                    </Form>
-                </Navbar> */}
+                    <Nav className="justify-content-end">
+                        <Navbar.Text style={{ marginRight: '10px' }}>
+                            Logueado como: <span style={{ color: 'white' }}>admin</span>
+                        </Navbar.Text>
+                        <Button className="nav-link" variant="outline-secondary" onClick={() => this.logout()}>Logout</Button>
+                    </Nav>
+                </Navbar>
 
                 <Container style={{ background: 'white' }} className="centered p-3 rounded" >
                     <Form onSubmit={this.submit} >
                         <Form.Row onSubmit={() => console.log("b")}>
                             <Col xs={6} xl={8} md={7} lg={9}>
-                                <Form.Control placeholder="URL Larga" required type="url" spellCheck onChange={(e) => this.setState({ destino: e.target.value })} />
+                                <Form.Control placeholder="URL Larga" required type="url" spellCheck onChange={(e) => this.setState({ destino: e.target.value })} value={this.state.destino} />
                             </Col>
                             <Col xs={4} xl={3} md={3} lg={2}>
-                                <Form.Control placeholder="Tag (opcional)" onChange={(e) => this.setState({ tag: e.target.value })} />
+                                <Form.Control placeholder="Tag (opcional)" onChange={(e) => this.setState({ tag: e.target.value })} value={this.state.tag}/>
                             </Col>
                             <Col>
                                 <Button variant="outline-dark" type="submit">Enviar</Button>
@@ -69,7 +77,7 @@ export class Dashboard extends Component {
                         </Form.Row>
                     </Form>
                     <br />
-                    <Table striped bordered hover>
+                    <Table striped bordered hover responsive>
                         <thead>
                             <tr>
                                 <th>Destino</th>
