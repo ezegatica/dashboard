@@ -51,7 +51,7 @@ export class Dashboard extends Component {
         return (
             <>
                 <Navbar bg="dark" variant="dark">
-                    <Navbar.Brand href="/">URL Shortener</Navbar.Brand>
+                    <Navbar.Brand href="/">Panel de Control</Navbar.Brand>
                     <Nav className="mr-auto">
                         {/* <NavLink className="nav-link" to="/">Home</NavLink> */}
                     </Nav>
@@ -67,6 +67,9 @@ export class Dashboard extends Component {
                 <div class="d-none d-lg-block">PANTALLA GRANDEEEE</div>
                  */}
                 <Container style={{ background: 'white' }} className="centered p-3 rounded" >
+
+                    {/* <Button variant="outline-secondary" onClick={() => this.getUrls()}>Reload</Button> */}
+
                     <Form onSubmit={this.submit} >
                         <Form.Row onSubmit={() => console.log("b")}>
                             <Col xs={6} xl={8} md={7} lg={9}>
@@ -83,7 +86,7 @@ export class Dashboard extends Component {
                     <br />
 
                     {/* PANTALLA GRANDE */}
-                    <div class="d-none d-lg-block">
+                    <div className="d-none d-lg-block">
                         <Table striped bordered hover responsive>
                             <thead>
                                 <tr>
@@ -112,15 +115,14 @@ export class Dashboard extends Component {
                     </div>
 
                     {/* PANTALLA CHICA */}
-                    <div class="d-lg-none">
+                    <div className="d-lg-none">
                         {this.state.urls.map((url) => {
                             return (
-                                <Alert variant="secondary">
+                                <Alert variant="secondary" key={url._id}>
                                     <p>
                                         <Alert.Link href={url.destino}>{url.destino}</Alert.Link><br />
                                         <a href={`${process.env.REACT_APP_API_URL}${url.tag}`} target="_blank" rel="noreferrer">{process.env.REACT_APP_API_URL}{url.tag} </a><Badge pill variant="light">{url.conteo} clicks</Badge>
                                     </p>
-
 
                                     <hr />
                                     <Button variant="success" onClick={() => this.copyShortToClipboard(url.tag)}>Copiar</Button> {' '}
