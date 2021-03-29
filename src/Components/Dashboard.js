@@ -14,17 +14,17 @@ export class Dashboard extends Component {
     }
     submit = async (e) => {
         e.preventDefault();
-        const res = await axios.post('https://link.eze.wtf/url', {
+        const res = await axios.post(process.env.REACT_APP_API_URL + 'url', {
             destino: this.state.destino,
             tag: this.state.tag
         })
         this.copyShortToClipboard(res.data.tag)
-        swal("URL Creada", `https://link.eze.wtf/${res.data.tag}`, "success");
+        swal("URL Creada", `${process.env.REACT_APP_API_URL}${res.data.tag}`, "success");
         this.getUrls()
 
     }
     getUrls = async () => {
-        const res = await axios.get('https://link.eze.wtf/url')
+        const res = await axios.get(process.env.REACT_APP_API_URL+'url')
         this.setState({
             urls: res.data
         })
@@ -33,11 +33,11 @@ export class Dashboard extends Component {
         this.getUrls()
     }
     copyShortToClipboard = (tag) => {
-        navigator.clipboard.writeText(`https://link.eze.wtf/${tag}`)
+        navigator.clipboard.writeText(`${process.env.REACT_APP_API_URL}${tag}`)
     }
     deleteUrl = async (id) => {
         console.log(id);
-        await axios.delete('https://link.eze.wtf/url/'+id)
+        await axios.delete(process.env.REACT_APP_API_URL+'url/'+id)
         this.getUrls()
     }
     render() {
@@ -83,7 +83,7 @@ export class Dashboard extends Component {
                                 return (
                                     <tr key={url._id}>
                                         <td><a href={url.destino}>{url.destino}</a></td>
-                                        <td><a href={`https://link.eze.wtf/${url.tag}`} target="_blank" rel="noreferrer">link.eze.wtf/{url.tag}</a></td>
+                                        <td><a href={`${process.env.REACT_APP_API_URL}${url.tag}`} target="_blank" rel="noreferrer">{process.env.REACT_APP_API_URL}/{url.tag}</a></td>
                                         <td>{url.conteo}</td>
                                         <td>
                                             <Button variant="success" onClick={() => this.copyShortToClipboard(url.tag)}>Copy</Button> {' '}

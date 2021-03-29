@@ -7,7 +7,7 @@ function AuthContextProvider(props) {
     const [loggedIn, setLoggedIn ] = useState(undefined);
 
     async function getLoggedIn(){
-        const loggedInRes = await axios.get("https://link.eze.wtf/auth/check");
+        const loggedInRes = await axios.get(process.env.REACT_APP_API_URL + "auth/check");
         setLoggedIn(loggedInRes.data)
     }
 

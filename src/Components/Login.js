@@ -20,7 +20,7 @@ function LoginComponent() {
             const loginData = {
                 username, password
             }
-        await axios.post("https://link.eze.wtf/auth/login", loginData, {
+        await axios.post(process.env.REACT_APP_API_URL + "auth/login", loginData, {
             withCredentials: true
         });
         await getLoggedIn()
