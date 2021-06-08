@@ -16,7 +16,7 @@ export class Dashboard extends Component {
     }
     submit = async (e) => {
         e.preventDefault();
-        const res = await axios.post(process.env.REACT_APP_API_URL + 'url', {
+        const res = await axios.post(process.env.REACT_APP_API_URL + 'url/new', {
             destino: this.state.destino,
             tag: this.state.tag
         })
@@ -27,7 +27,7 @@ export class Dashboard extends Component {
 
     }
     getUrls = async () => {
-        const res = await axios.get(process.env.REACT_APP_API_URL + 'url')
+        const res = await axios.get(process.env.REACT_APP_API_URL + 'url/all')
         this.setState({
             urls: res.data
         })
