@@ -4,6 +4,7 @@ import {
     , Navbar, Nav, Alert, Badge
     , Table
 } from "react-bootstrap";
+
 // import { NavLink } from "react-router-dom";
 import axios from 'axios'
 import swal from 'sweetalert'
@@ -16,9 +17,14 @@ export class Dashboard extends Component {
     }
     submit = async (e) => {
         e.preventDefault();
-        const res = await axios.post(process.env.REACT_APP_API_URL + 'url/new', {
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}url/new`, {
             destino: this.state.destino,
             tag: this.state.tag
+        }, {
+            headers: {
+                "token": await localStorage.getItem('at'),
+                "Content-Type": "application/json"
+            }
         })
         this.setState({ destino: '', tag: '' })
         this.copyShortToClipboard(res.data.tag)
@@ -27,24 +33,36 @@ export class Dashboard extends Component {
 
     }
     getUrls = async () => {
-        const res = await axios.get(process.env.REACT_APP_API_URL + 'url/all')
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}url/all`, {
+            headers: {
+                "token": await localStorage.getItem('at')
+            }
+        })
         this.setState({
             urls: res.data
         })
     }
     componentDidMount = () => {
-        this.getUrls()
+        this.getUrls();
+        setInterval(() => {
+            this.getUrls();
+        }, 30000);
     }
     copyShortToClipboard = (tag) => {
         navigator.clipboard.writeText(`${process.env.REACT_APP_API_URL}${tag}`)
     }
     deleteUrl = async (id) => {
-        console.log(id);
-        await axios.delete(process.env.REACT_APP_API_URL + 'url/' + id)
+        // console.log(id);
+        // await axios.delete(process.env.REACT_APP_API_URL + 'url/' + id, {})
+        await axios.delete(`${process.env.REACT_APP_API_URL}url/${id}`, {
+            headers: {
+                "token": await localStorage.getItem('at')
+            }
+        })
         this.getUrls()
     }
     logout = async () => {
-        await axios.get(process.env.REACT_APP_API_URL + 'auth/logout')
+        localStorage.clear();
         window.location.reload()
     }
     render() {
