@@ -3,10 +3,13 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { User, IError } from '../types';
-
+import { useRouter } from 'next/navigation';
 import Toast from '@components/Toast';
+import Spinner from '@components/Spinner';
 
 export default function Login() {
+  const router = useRouter();
+
   const [user, setUser] = useState<User>({
     email: '',
     password: ''
@@ -17,10 +20,11 @@ export default function Login() {
     show: false
   });
 
-  const [token, setToken] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const login = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await fetch('https://jesse.eze.net.ar/login', {
         method: 'POST',
@@ -33,13 +37,15 @@ export default function Login() {
 
       const message = await res.text();
 
-      if (res.status !== 200){
+      if (res.status !== 200) {
         throw new Error(message);
       }
 
-      setToken(message);
+      router.push('/dashboard');
     } catch (error: any) {
       setError({ message: error.message, show: true });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,9 +122,10 @@ export default function Login() {
               <div>
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  disabled={loading}
+                  className="flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus:outline-none disabled:opacity-50"
                 >
-                  Sign in
+                  {loading ? <Spinner size="small" /> : 'Sign in'}
                 </button>
               </div>
             </form>
@@ -126,10 +133,13 @@ export default function Login() {
         </div>
       </div>
 
-      <Toast title="Login failed!" message={error.message} onClose={hideError} show={error.show} variant="error" />
-
-      <Toast title="Inicio de sesion exitoso!" message={token} onClose={() => setToken('')} show={!!token} variant="success" />
-
+      <Toast
+        title="Login failed!"
+        message={error.message}
+        onClose={hideError}
+        show={error.show}
+        variant="error"
+      />
     </>
   );
 }
