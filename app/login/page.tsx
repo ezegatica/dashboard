@@ -3,12 +3,13 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { User, IError } from '../types';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Toast from '@components/Toast';
 import Spinner from '@components/Spinner';
 
 export default function Login() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [user, setUser] = useState<User>({
     email: '',
@@ -30,17 +31,31 @@ export default function Login() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'text/plain'
         },
         body: JSON.stringify(user)
       });
 
+      
       const message = await res.text();
-
+      
       if (res.status !== 200) {
         throw new Error(message);
       }
 
+      await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: message
+        })
+      });
+
+      if (searchParams?.has('next')) {
+        router.push(searchParams.get('next') || '/dashboard');
+        return;
+      }
       router.push('/dashboard');
     } catch (error: any) {
       setError({ message: error.message, show: true });

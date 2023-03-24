@@ -1,11 +1,12 @@
 'use client';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
+import Spinner from './Spinner';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ');
@@ -13,6 +14,22 @@ function classNames(...classes: any[]) {
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const logout = async () => {
+    setLoading(true);
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST'
+      });
+      router.push('/login');
+    } catch (error) {
+      console.log({ error });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const navigation = [
     {
@@ -67,6 +84,21 @@ export default function Navbar() {
                       ))}
                     </div>
                   </div>
+                </div>
+
+                <div
+                  className="
+                  hidden md:block
+                  flex items-center
+                  space-x-4
+                "
+                >
+                  <span
+                    onClick={logout}
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:cursor-pointer"
+                  >
+                    {loading ? <Spinner size="small" /> : 'Logout'}
+                  </span>
                 </div>
                 <div className="-mr-2 flex md:hidden">
                   {/* Mobile menu button */}
