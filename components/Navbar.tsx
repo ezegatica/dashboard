@@ -45,7 +45,7 @@ export default function Navbar() {
     {
       name: 'Logs',
       href: '/dashboard/logs',
-      current: pathname === '/dashboard/logs'
+      current: pathname?.startsWith('/dashboard/logs')
     }
   ];
   return (
