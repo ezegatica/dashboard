@@ -1,4 +1,4 @@
-import { LogsRequest } from '../../types';
+import { LogsRequest } from '../../../types';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ');
