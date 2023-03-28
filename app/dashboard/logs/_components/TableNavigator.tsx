@@ -25,34 +25,34 @@ export default function TableNavigator({
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
-        <button
-          disabled={logs.page <= 1}
+        <Link
           aria-disabled={logs.page <= 1}
-          className="disabled:opacity-50 disabled:cursor-default relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+          href={`/dashboard/logs/${type}?page=${
+            logs.page > 1 ? logs.page - 1 : '1'
+          }`}
         >
-          <Link
+          <button
+            disabled={logs.page <= 1}
             aria-disabled={logs.page <= 1}
-            href={`/dashboard/logs/${type}?page=${
-              logs.page > 1 ? logs.page - 1 : '1'
-            }`}
+            className="disabled:opacity-50 disabled:cursor-default relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
           >
             Previous
-          </Link>
-        </button>
-        <button
-          disabled={logs.page >= logs.totalPages}
+          </button>
+        </Link>
+        <Link
+          href={`/dashboard/logs/${type}?page=${
+            logs.page < logs.totalPages ? logs.page + 1 : logs.totalPages
+          }`}
           aria-disabled={logs.page <= 1}
-          className="disabled:opacity-50 relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
         >
-          <Link
-            href={`/dashboard/logs/${type}?page=${
-              logs.page < logs.totalPages ? logs.page + 1 : logs.totalPages
-            }`}
+          <button
+            disabled={logs.page >= logs.totalPages}
             aria-disabled={logs.page <= 1}
+            className="disabled:opacity-50 relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
           >
             Next
-          </Link>
-        </button>
+          </button>
+        </Link>
       </div>
     </nav>
   ) : null;

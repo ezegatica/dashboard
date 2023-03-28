@@ -27,7 +27,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('https://jesse.eze.net.ar/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,21 +36,11 @@ export default function Login() {
       });
 
       
-      const message = await res.text();
+      const json = await res.json();
       
       if (res.status !== 200) {
-        throw new Error(message);
+        throw new Error(json.error);
       }
-
-      await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: message
-        })
-      });
 
       if (searchParams?.has('next')) {
         router.push(searchParams.get('next') || '/dashboard');
