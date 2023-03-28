@@ -1,9 +1,13 @@
+import { PrismaClient } from '@prisma/client';
 import React from 'react';
+import ItemsTable from './_components/ItemsTable';
 
-export default function VentasPage() {
+export default async function VentasPage() {
+  const prisma = new PrismaClient();
+  const items = await prisma.items.findMany();
   return (
     <main>
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">Ventas</div>
+      <ItemsTable items={items} />
     </main>
   );
 }
