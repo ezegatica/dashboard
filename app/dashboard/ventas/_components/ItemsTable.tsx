@@ -99,7 +99,7 @@ export default function ItemsTable({ items }: { items: items[] }) {
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <a
                         href={`https://${
-                          process.env.NODE_ENV === 'development' && 'new-'
+                          process.env.NODE_ENV === 'development' ? 'new-' : '' 
                         }ventas.ezegatica.com/items/${item.id}`}
                         className="group flex items-center space-x-2.5 text-sm font-medium text-indigo-600 hover:text-indigo-900"
                         target="_blank"
