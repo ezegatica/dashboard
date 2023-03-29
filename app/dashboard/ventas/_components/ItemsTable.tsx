@@ -10,7 +10,7 @@ export default function ItemsTable({ items }: { items: items[] }) {
   const toggleSold = async (item: items): Promise<void> => {
     setLoading(true);
     try {
-      await fetch(`/api/ventas/items/${item.id}`, {
+      await fetch(`/api/ventas/item/${item.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

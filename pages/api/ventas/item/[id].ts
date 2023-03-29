@@ -45,14 +45,6 @@ export default async function handler(
     });
     return res.status(200).json(item);
   }
-  if (req.method === 'POST') {
-    const item = await prisma.items.create({
-      data: {
-        ...req.body
-      }
-    });
-    return res.status(200).json(item);
-  }
-
+  
   return res.status(405).json({ error: 'Method not allowed' });
 }
