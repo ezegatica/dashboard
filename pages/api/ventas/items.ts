@@ -18,7 +18,8 @@ export default async function handler(
   if (req.method === 'POST') {
     const item = await prisma.items.create({
       data: {
-        ...req.body
+        ...req.body,
+        vendido: false
       }
     });
     return res.status(200).json(item);

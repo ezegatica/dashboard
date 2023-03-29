@@ -3,6 +3,9 @@
 import React from 'react';
 import { items } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import EditButton from './EditButton';
+import { LinkIcon } from '@heroicons/react/20/solid';
+import AddButton from './AddButton';
 
 export default function ItemsTable({ items }: { items: items[] }) {
   const router = useRouter();
@@ -34,12 +37,7 @@ export default function ItemsTable({ items }: { items: items[] }) {
           </h1>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add item
-          </button>
+          <AddButton />
         </div>
       </div>
       <div className="mt-8 flow-root">
@@ -58,13 +56,19 @@ export default function ItemsTable({ items }: { items: items[] }) {
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
+                    Link
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
                     Status
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Role
+                    Price
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
@@ -92,6 +96,22 @@ export default function ItemsTable({ items }: { items: items[] }) {
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <a
+                        href={`https://${
+                          process.env.NODE_ENV === 'development' && 'new-'
+                        }ventas.ezegatica.com/items/${item.id}`}
+                        className="group flex items-center space-x-2.5 text-sm font-medium text-indigo-600 hover:text-indigo-900"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <LinkIcon
+                          className="h-5 w-5 text-indigo-500 group-hover:text-indigo-900"
+                          aria-hidden="true"
+                        />
+                        <span>Go to site</span>
+                      </a>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {item.vendido ? (
                         <span className="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800">
                           Vendido
@@ -107,13 +127,7 @@ export default function ItemsTable({ items }: { items: items[] }) {
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <span className="isolate inline-flex rounded-md shadow-sm">
-                        <button
-                          type="button"
-                          disabled={isLoading}
-                          className="disabled:opacity-50 disabled:cursor-default relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-                        >
-                          Editar<span className="sr-only">, {item.nombre}</span>
-                        </button>
+                        <EditButton item={item} />
                         <button
                           type="button"
                           disabled={isLoading}
