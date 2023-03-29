@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import EditButton from './EditButton';
 import { LinkIcon } from '@heroicons/react/20/solid';
 import AddButton from './AddButton';
+import DeleteButton from './DeleteButton';
 
 export default function ItemsTable({ items }: { items: items[] }) {
   const router = useRouter();
@@ -128,14 +129,7 @@ export default function ItemsTable({ items }: { items: items[] }) {
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <span className="isolate inline-flex rounded-md shadow-sm">
                         <EditButton item={item} />
-                        <button
-                          type="button"
-                          disabled={isLoading}
-                          className="disabled:opacity-50 disabled:cursor-default relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-                        >
-                          Eliminar
-                          <span className="sr-only">, {item.nombre}</span>
-                        </button>
+                        <DeleteButton item={item} />
                         <button
                           type="button"
                           disabled={isLoading}
