@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model items {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  v                 Int?     @map("__v")
+  descripcion       String
+  imagen            String[]
+  nombre            String
+  precio            Int
+  short_descripcion String
+  vendido           Boolean
+
+  @@index([nombre, descripcion], map: "nombre_1_descripcion_1")
+  @@index([nombre], map: "nombre_1")
+  @@index([short_descripcion], map: "short_descripcion_1")
+}
