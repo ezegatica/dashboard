@@ -12,8 +12,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // API ventas middleware
-  if (request.nextUrl.pathname.startsWith('/api/ventas')) {
+  // API not public middleware
+  if (request.nextUrl.pathname.startsWith('/api') && !request.nextUrl.pathname.startsWith('/api/public')) {
     if (request.cookies.has('token')) {
       const response = await fetch(`https://jesse.eze.net.ar/check`, {
         method: 'POST',
