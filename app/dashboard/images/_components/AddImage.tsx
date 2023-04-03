@@ -3,52 +3,38 @@ import React, { useState } from 'react';
 import { TrashIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import ModalWrapper from '@components/ModalWrapper';
+import { uploadImage } from '../api';
+import {useRouter} from 'next/navigation';
 
 export default function AddImage({ token }: { token: string }) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File>();
+  const router = useRouter();
 
   const onClick = () => {
     setOpen(true);
-    console.log('Abrir modal');
   };
 
   const onConfirm = async () => {
-    // TODO: CAMBIAR POR s3
     if (!file) return;
-    console.log(file);
-    console.log('Confirmar');
-    const response = await fetch(
-      `https://api.sirv.com/v2/files/upload?filename=${`img/${file.name}`}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        body: file
-      }
-    ).then(response => response.json());
-
-    console.log(response);
-
+    await uploadImage(token, file);
+    
     setOpen(false);
     clearImage();
+    router.refresh();
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Set image');
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
   };
 
   const onCancel = () => {
-    console.log('Cancelar');
     clearImage();
     setOpen(false);
   };
 
   const clearImage = () => {
-    console.log('Clear image');
     setFile(undefined);
   };
   return (
