@@ -1,5 +1,6 @@
 import React, { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import Spinner from './Spinner';
 
 export default function ModalWrapper({
   children,
@@ -7,7 +8,8 @@ export default function ModalWrapper({
   setOpen,
   onConfirm,
   onCancel,
-  confirmText
+  confirmText,
+  loading = false
 }: {
   children: React.ReactNode;
   open: boolean;
@@ -15,6 +17,7 @@ export default function ModalWrapper({
   onConfirm?: () => void;
   onCancel?: () => void;
   confirmText?: string;
+  loading?: boolean;
 }) {
   const cancelButtonRef = useRef(null);
   return (
@@ -53,14 +56,15 @@ export default function ModalWrapper({
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
                     type="submit"
-                    className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                    disabled={loading}
+                    className="disabled:opacity-50 disabled:cursor-default inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
                     onClick={() => {
                         if (onConfirm) {
                             onConfirm();
                         }
                     }}
                   >
-                    {confirmText ? confirmText : 'Confirm'}
+                    {loading ? <Spinner size='small'/> : confirmText ? confirmText : 'Confirm'}
                   </button>
                   <button
                     type="button"

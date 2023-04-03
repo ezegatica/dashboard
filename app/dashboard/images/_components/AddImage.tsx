@@ -8,6 +8,7 @@ import {useRouter} from 'next/navigation';
 
 export default function AddImage({ token }: { token: string }) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File>();
   const router = useRouter();
 
@@ -17,8 +18,9 @@ export default function AddImage({ token }: { token: string }) {
 
   const onConfirm = async () => {
     if (!file) return;
+    setLoading(true);
     await uploadImage(token, file);
-    
+    setLoading(false);
     setOpen(false);
     clearImage();
     router.refresh();
@@ -53,6 +55,7 @@ export default function AddImage({ token }: { token: string }) {
         setOpen={setOpen}
         onCancel={onCancel}
         onConfirm={onConfirm}
+        loading={loading}
       >
         <div>
           {!file ? (
