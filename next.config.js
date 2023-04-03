@@ -11,6 +11,12 @@ const nextConfig = {
         port: '',
         pathname: '/assets/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'gatica.sirv.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   }
 }

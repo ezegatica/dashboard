@@ -20,7 +20,7 @@ export default function Navbar() {
   const logout = async () => {
     setLoading(true);
     try {
-      await fetch('/api/auth/logout', {
+      await fetch('/api/public/auth/logout', {
         method: 'POST'
       });
       router.push('/login');
@@ -46,6 +46,11 @@ export default function Navbar() {
       name: 'Logs',
       href: '/dashboard/logs',
       current: pathname?.startsWith('/dashboard/logs')
+    },
+    {
+      name: 'Images',
+      href: '/dashboard/images',
+      current: pathname?.startsWith('/dashboard/images')
     }
   ];
   return (
