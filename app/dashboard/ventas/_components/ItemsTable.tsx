@@ -1,17 +1,18 @@
 'use client';
 
 import React from 'react';
-import { items } from '@prisma/client';
+import { Item } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import EditButton from './EditButton';
 import { LinkIcon } from '@heroicons/react/20/solid';
 import AddButton from './AddButton';
 import DeleteButton from './DeleteButton';
+import Image from 'next/image';
 
-export default function ItemsTable({ items }: { items: items[] }) {
+export default function ItemsTable({ items }: { items: Item[] }) {
   const router = useRouter();
   const [isLoading, setLoading] = React.useState(false);
-  const toggleSold = async (item: items): Promise<void> => {
+  const toggleSold = async (item: Item): Promise<void> => {
     setLoading(true);
     try {
       await fetch(`/api/ventas/item/${item.id}`, {
@@ -82,8 +83,11 @@ export default function ItemsTable({ items }: { items: items[] }) {
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0">
-                          <img
+                          <Image
                             className="h-10 w-10 rounded-full"
+                            width={40}
+                            height={40}
+                            quality={25}
                             src={item.imagen[0]}
                             alt=""
                             style={{ objectFit: 'cover' }}
@@ -99,8 +103,8 @@ export default function ItemsTable({ items }: { items: items[] }) {
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <a
                         href={`https://${
-                          process.env.NODE_ENV === 'development' ? 'new-' : '' 
-                        }ventas.ezegatica.com/items/${item.id}`}
+                          process.env.NODE_ENV === 'development' ? 'ventas.preview.ezegatica.com' : 'ventas.ezegatica.com' 
+                        }/p/${item.slug}`}
                         className="group flex items-center space-x-2.5 text-sm font-medium text-indigo-600 hover:text-indigo-900"
                         target="_blank"
                         rel="noreferrer"

@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { items } from '@prisma/client';
+import { Item } from '@prisma/client';
 import Spinner from '@components/Spinner';
 import { useRouter } from 'next/navigation';
 
@@ -12,15 +12,18 @@ export default function ItemPopup({
 }: {
   open: boolean;
   setOpen: (state: boolean) => void;
-  item?: items;
+  item?: Item;
 }) {
   const router = useRouter();
-  const [data, setData] = useState<Omit<items, 'id' | 'v' | 'vendido'>>({
+  const [data, setData] = useState<
+    Omit<Item, 'id' | 'updatedAt' | 'createdAt' | 'vendido'>
+  >({
     nombre: item?.nombre || '',
     descripcion: item?.descripcion || '',
     short_descripcion: item?.short_descripcion || '',
     precio: item?.precio || 0,
-    imagen: item?.imagen || []
+    imagen: item?.imagen || [],
+    slug: item?.slug || ''
   });
   const [loading, setLoading] = useState(false);
   const [imagenes, setImagenes] = useState<string>(
@@ -63,7 +66,8 @@ export default function ItemPopup({
           descripcion: '',
           short_descripcion: '',
           precio: 0,
-          imagen: []
+          imagen: [],
+          slug: ''
         });
       }
       // After update or create, refresh the page
@@ -132,6 +136,35 @@ export default function ItemPopup({
 
                       {/* Divider container */}
                       <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                        {/* Item Slug */}
+                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          <div>
+                            <label
+                              htmlFor="nombre"
+                              className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                            >
+                              Item Slug
+                            </label>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <div className="mt-2 flex rounded-md shadow-sm">
+                              <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 sm:text-sm">
+                                /p/
+                              </span>
+                              <input
+                                type="text"
+                                name="slug"
+                                id="slug"
+                                required
+                                value={data.slug}
+                                onChange={onChange}
+                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                placeholder="item-name"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
                         {/* Item name */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>

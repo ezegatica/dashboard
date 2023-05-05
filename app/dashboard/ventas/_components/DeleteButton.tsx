@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { items } from '@prisma/client';
+import { Item } from '@prisma/client';
 import Modal from '@components/Modal';
 import { useRouter } from 'next/navigation';
 
-export default function DeleteButton({ item }: { item: items }) {
+export default function DeleteButton({ item }: { item: Item }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
