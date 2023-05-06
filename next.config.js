@@ -17,6 +17,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.ezegatica.com',
+        port: '',
+        pathname: '/**',
+      }
     ],
   }
 }

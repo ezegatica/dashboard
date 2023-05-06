@@ -1,10 +1,10 @@
 'use client';
 
-import { items } from '@prisma/client';
+import { Item } from '@prisma/client';
 import React, { useState } from 'react';
 import ItemPopup from './ItemPopup';
 
-export default function EditButton({ item }: { item: items }) {
+export default function EditButton({ item }: { item: Item }) {
   const [show, setShow] = useState(false);
   const onClick = () => {
     setShow(true);

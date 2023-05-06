@@ -5,10 +5,10 @@ import Image from 'next/image';
 export default function ImageCard({ image }: { image: FileContent }) {
   return (
     <li key={image.filename} className="relative">
-      <a href={`https://gatica.sirv.com/img/${image.filename}`} target="_blank">
+      <a href={`https://i.ezegatica.com/${image.filename}`} target="_blank">
         <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
           <Image
-            src={`https://gatica.sirv.com/img/${image.filename}`}
+            src={`https://i.ezegatica.com/${image.filename}`}
             alt=""
             className="pointer-events-none object-cover group-hover:opacity-75"
             width={400}

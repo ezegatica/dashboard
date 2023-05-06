@@ -1,22 +1,23 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@lib/prisma';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const query = req.query;
-  const id = query.id as string;
-  const prisma = new PrismaClient();
-  const objectId = /^[a-f\d]{24}$/i;
-  if (!objectId.test(id)) {
+  if (!query.id) {
     return res
       .status(400)
-      .json({ error: "Invalid ID, must follow Mongo's ObjectId format" });
+      .json({ error: 'Invalid ID, must be specified in query' });
   }
 
+  const idString = Array.isArray(query.id) ? query.id.join('') : query.id;
+
+  const id = parseInt(idString, 10);
+
   if (req.method === 'GET') {
-    const item = await prisma.items.findUnique({
+    const item = await prisma.item.findUnique({
       where: {
         id
       }
@@ -27,7 +28,7 @@ export default async function handler(
     return res.status(200).json(item);
   }
   if (req.method === 'PUT' || req.method === 'PATCH') {
-    const item = await prisma.items.update({
+    const item = await prisma.item.update({
       where: {
         id
       },
@@ -38,13 +39,13 @@ export default async function handler(
     return res.status(200).json(item);
   }
   if (req.method === 'DELETE') {
-    const item = await prisma.items.delete({
+    const item = await prisma.item.delete({
       where: {
         id
       }
     });
     return res.status(200).json(item);
   }
-  
+
   return res.status(405).json({ error: 'Method not allowed' });
 }
