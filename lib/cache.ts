@@ -31,12 +31,13 @@ export const revalidatePath = async (path: string) => {
 };
 
 const getVentasURL = () => {
-  switch (process.env.VERCEL_ENV) {
+  switch (process.env.NEXT_PUBLIC_VERCEL_ENV) {
     case 'development':
       return 'https://ventas.preview.ezegatica.com';
     case 'production':
       return 'https://ventas.ezegatica.com';
     default:
+      console.warn("No VERCEL_ENV entry found, using 'http://localhost:3000' > " + process.env.NEXT_PUBLIC_VERCEL_ENV)
       return 'http://localhost:3000';
   }
 };
