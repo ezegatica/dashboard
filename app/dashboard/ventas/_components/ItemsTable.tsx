@@ -8,6 +8,7 @@ import { LinkIcon } from '@heroicons/react/20/solid';
 import AddButton from './AddButton';
 import DeleteButton from './DeleteButton';
 import Image from 'next/image';
+import FlushCacheButton from './FlushCache';
 
 export default function ItemsTable({ items }: { items: Item[] }) {
   const router = useRouter();
@@ -37,6 +38,9 @@ export default function ItemsTable({ items }: { items: Item[] }) {
           <h1 className="text-base font-semibold leading-6 text-gray-900">
             Items
           </h1>
+        </div>
+        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+          <FlushCacheButton />
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <AddButton />

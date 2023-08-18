@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@lib/prisma';
+import { revalidatePath, revalidateRoot } from '../../../lib/cache';
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,6 +20,7 @@ export default async function handler(
         ...req.body
       }
     });
+    await revalidatePath(item.slug);
     return res.status(200).json(item);
   }
 }
