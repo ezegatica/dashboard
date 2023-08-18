@@ -4,6 +4,7 @@ import { revalidateAll } from '../../../../lib/cache';
 
 export default function FlushCacheButton() {
   return (
+    // @ts-ignore TS2322 (Server actions)
     <form action={revalidateAll}>
       <button
         type="submit"
