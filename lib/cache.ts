@@ -1,3 +1,4 @@
+'use server';
 import { get } from '@vercel/edge-config';
 
 export const revalidateRoot = async () => {
@@ -19,7 +20,7 @@ export const revalidatePath = async (path: string) => {
   console.info(`Revalidating path ${path} in ${url}`);
 
   const res = await fetch(
-    `${url}/api/revalidate?secret=${secret}&path=${path}`,
+    `${url}/api/revalidate?secret=${secret}&path="/p/${path}"`,
     {
       method: 'POST'
     }
@@ -28,6 +29,21 @@ export const revalidatePath = async (path: string) => {
   console.info({ res: json });
 
   return res;
+};
+
+export async function revalidateAll() {
+  const secret = await get('secret');
+  const url = getVentasURL();
+  console.info(`Revalidating <ALL> in ${url}`);
+
+  const res = await fetch(
+    `${url}/api/revalidate?secret=${secret}&path="/p/[slug]"`,
+    {
+      method: 'POST'
+    }
+  );
+  const json = await res.json();
+  console.info({ res: json });
 };
 
 const getVentasURL = () => {
