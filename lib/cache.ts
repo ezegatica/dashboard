@@ -33,6 +33,7 @@ export const revalidatePath = async (path: string) => {
 const getVentasURL = () => {
   switch (process.env.NEXT_PUBLIC_VERCEL_ENV) {
     case 'development':
+    case 'preview':
       return 'https://ventas.preview.ezegatica.com';
     case 'production':
       return 'https://ventas.ezegatica.com';
