@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import ModalWrapper from '@components/ModalWrapper';
-import { uploadImage } from '../api';
+import { uploadImages } from '../api';
 import {useRouter} from 'next/navigation';
 
 export default function AddImage({ token }: { token: string }) {
@@ -18,9 +18,7 @@ export default function AddImage({ token }: { token: string }) {
   const onConfirm = async () => {
     if (!files) return;
     setLoading(true);
-    await Promise.all(
-      files.map((file) => uploadImage(token, file))
-    )
+    uploadImages(token, files)
     setLoading(false);
     setOpen(false);
     clearAllImages();
