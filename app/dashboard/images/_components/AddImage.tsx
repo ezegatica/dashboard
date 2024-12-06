@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { TrashIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import ModalWrapper from '@components/ModalWrapper';
 import { uploadImage } from '../api';
@@ -9,7 +8,7 @@ import {useRouter} from 'next/navigation';
 export default function AddImage({ token }: { token: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState<File>();
+  const [files, setFiles] = useState<File[]>();
   const router = useRouter();
 
   const onClick = () => {
@@ -17,28 +16,42 @@ export default function AddImage({ token }: { token: string }) {
   };
 
   const onConfirm = async () => {
-    if (!file) return;
+    if (!files) return;
     setLoading(true);
-    await uploadImage(token, file);
+    await Promise.all(
+      files.map((file) => uploadImage(token, file))
+    )
     setLoading(false);
     setOpen(false);
-    clearImage();
+    clearAllImages();
     router.refresh();
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFile(e.target.files[0]);
+      setFiles(Array.from(e.target.files));
     }
   };
 
   const onCancel = () => {
-    clearImage();
+    clearAllImages();
     setOpen(false);
   };
 
-  const clearImage = () => {
-    setFile(undefined);
+  const clearImage = (index: number) => {
+    if (!files) return;
+    // Remove the file at the given index
+    const updatedFiles = files.filter((_, i) => i !== index);
+    setFiles(updatedFiles);
   };
+
+  const clearAllImages = () => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    // Clear each image by its index
+    files.forEach((_, index) => clearImage(index));
+  };
+  
   return (
     <>
       {/* Button */}
@@ -58,7 +71,7 @@ export default function AddImage({ token }: { token: string }) {
         loading={loading}
       >
         <div>
-          {!file ? (
+          {!files || files.length < 1 ? (
             <div className="flex items-center justify-center w-full">
               <label
                 htmlFor="dropzone-file"
@@ -93,25 +106,22 @@ export default function AddImage({ token }: { token: string }) {
                   type="file"
                   className="hidden"
                   accept="image/png, image/jpeg, image/jpg, image/webp"
+                  multiple
                   onChange={e => onChange(e)}
                 />
               </label>
             </div>
           ) : (
             <div className="flex items-center justify-center w-full">
-              {/* Add a overlay that when on hover, shows a delete button */}
-              <div
-                className="absolute top-5 right-5 z-10 flex items-center justify-center p-1 w-8 h-8 bg-red-600 rounded-full cursor-pointer"
-                onClick={clearImage}
-              >
-                <TrashIcon color="white" />
-              </div>
+              {files.map((file, i) => <>
               <Image
+                onClick={() => clearImage(i)}
                 src={URL.createObjectURL(file)}
                 alt="Imagen"
-                width={500}
-                height={500}
-              />
+                width={200}
+                height={200}
+              /> 
+              </>)}
             </div>
           )}
         </div>
