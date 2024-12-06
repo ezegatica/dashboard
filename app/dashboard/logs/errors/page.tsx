@@ -1,11 +1,12 @@
 import TableWrapper from '../_components/TableWrapper';
 import { LogsRequest } from '../../../types';
 
-export default async function LogsErrorsPage({
-  searchParams
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+export default async function LogsErrorsPage(
+  props: {
+    searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const logs: LogsRequest = await fetch(
     `https://api-bot.eze.net.ar/errors?page=${searchParams?.page || 1}`,
     {
