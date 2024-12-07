@@ -9,22 +9,22 @@ import Spinner from '@components/Spinner';
 
 export default function Login() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
+  
   const [user, setUser] = useState<User>({
     email: '',
     password: ''
   });
-
+  
   const [error, setError] = useState<IError>({
     message: '',
     show: false
   });
-
+  
   const [loading, setLoading] = useState<boolean>(false);
-
+  
   const login = async (e: any) => {
     e.preventDefault();
+    const searchParams = useSearchParams();
     setLoading(true);
     try {
       const res = await fetch('/api/public/auth/login', {
