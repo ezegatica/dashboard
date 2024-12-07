@@ -9,6 +9,7 @@ import AddButton from './AddButton';
 import DeleteButton from './DeleteButton';
 import Image from 'next/image';
 import FlushCacheButton from './FlushCache';
+import Link from 'next/link';
 
 export default function ItemsTable({ items }: { items: Item[] }) {
   const router = useRouter();
@@ -105,7 +106,7 @@ export default function ItemsTable({ items }: { items: Item[] }) {
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <a
+                      <Link
                         href={`https://${
                           process.env.NODE_ENV === 'development' ? 'ventas.preview.ezegatica.com' : 'ventas.ezegatica.com' 
                         }/p/${item.slug}`}
@@ -118,7 +119,7 @@ export default function ItemsTable({ items }: { items: Item[] }) {
                           aria-hidden="true"
                         />
                         <span>Go to site</span>
-                      </a>
+                      </Link>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {item.vendido ? (

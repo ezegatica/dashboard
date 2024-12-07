@@ -27,25 +27,45 @@ export const fetchImages = async (token: string): Promise<Files> => {
     return response.json();
 }
 
-export const uploadImage = async (token: string, file: File): Promise<void> => {
-  // Use this (20220821-1335R.jpg) format for the filename. The dates have to be the same as the actual date, not the file's date. The last letter has to be a random letter.
-  // The format is (YYYYMMDD-HHMMR.{file.extension})
-  // The R is for random letter.
-  const filename = `${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${new Date().toISOString().slice(11, 16).replace(/:/g, '')}${
-    // Add a 50/50 chance of being uppercase or lowercase
-    String.fromCharCode(97 + Math.floor(Math.random() * 26) + (Math.random() > 0.5 ? 0 : -32))
-  }.${file.type.split('/').pop()}`;
-  const filenameDecoded = `/img/${filename}`; 
-  const filenameEncoded = encodeURIComponent(filenameDecoded);
-  await fetch(
-    `https://api.sirv.com/v2/files/upload?filename=${filenameEncoded}`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': `${file.type}`
-      },
-      body: file
-    }
-  );
+export const uploadImages = async (token: string, files: File[]): Promise<void> => {
+  const generateRandomName = (file: File): string => {
+    // Use this (20220821-1335R.jpg) format for the filename. The dates have to be the same as the actual date, not the file's date. The last letter has to be a random letter.
+    // The format is (YYYYMMDD-HHMMR.{file.extension})
+    // The R is for random letter.
+    return `${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${new Date().toISOString().slice(11, 16).replace(/:/g, '')}${
+      // Add a 50/50 chance of being uppercase or lowercase
+      String.fromCharCode(97 + Math.floor(Math.random() * 26) + (Math.random() > 0.5 ? 0 : -32))
+    }.${file.type.split('/').pop()}`;   
+  }
+  const namesSet = new Set<string>();
+
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    let name;
+    do {
+      name = generateRandomName(file);
+    } while (namesSet.has(name));
+    namesSet.add(name)
+  }
+
+  await Promise.all(
+    files.map((file, i) => {
+      const filename = Array.from(namesSet.values())[i]
+      const filenameDecoded = `/img/${filename}`; 
+      const filenameEncoded = encodeURIComponent(filenameDecoded);
+      return fetch(
+        `https://api.sirv.com/v2/files/upload?filename=${filenameEncoded}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': `${file.type}`
+          },
+          body: file
+        }
+      );
+    })
+  )
+
 }

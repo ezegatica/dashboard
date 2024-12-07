@@ -1,11 +1,12 @@
 import React from 'react';
 import { FileContent } from '../types';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function ImageCard({ image }: { image: FileContent }) {
   return (
     <li key={image.filename} className="relative">
-      <a href={`https://i.ezegatica.com/${image.filename}`} target="_blank">
+      <Link href={`https://i.ezegatica.com/${image.filename}`} target="_blank">
         <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
           <Image
             src={`https://i.ezegatica.com/${image.filename}`}
@@ -19,7 +20,7 @@ export default function ImageCard({ image }: { image: FileContent }) {
             <span className="sr-only">View details for {image.filename}</span>
           </button>
         </div>
-      </a>
+      </Link>
       <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">
         {image.filename}
       </p>
