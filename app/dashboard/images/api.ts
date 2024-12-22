@@ -1,6 +1,12 @@
 import { Files } from "./types";
 
 export const fetchToken = async (): Promise<{token: string}> => {
+  const clientId = process.env.SIRV_API_CLIENT_ID;
+  const clientSecret = process.env.SIRV_API_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+      throw new Error('SIRV_API_CLIENT_ID and SIRV_API_CLIENT_SECRET must be defined');
+  }
     const data = await fetch('https://api.sirv.com/v2/token', {
       method: 'POST',
       headers: {
@@ -8,8 +14,8 @@ export const fetchToken = async (): Promise<{token: string}> => {
         'Cache-Control': 'max-age=60'
       },
       body: JSON.stringify({
-        clientId: process.env.SIRV_API_CLIENT_ID,
-        clientSecret: process.env.SIRV_API_CLIENT_SECRET
+        clientId,
+        clientSecret
       })
     });
     return data.json();

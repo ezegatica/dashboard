@@ -3,13 +3,15 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { User, IError } from '../types';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Toast from '@components/Toast';
 import Spinner from '@components/Spinner';
 import { loginUser } from './actions';
 
+export const dynamic = 'force-dynamic';
+
 export default function Login() {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams(); // https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
   const router = useRouter();
 
   const [error, setError] = useState<IError>({
@@ -28,9 +30,9 @@ export default function Login() {
     try {
       await loginUser(user);
 
-      if (searchParams?.has('next')) {
-        return router.push(searchParams.get('next') || '/dashboard');
-      }
+      // if (searchParams?.has('next')) {
+      //   return router.push(searchParams.get('next') || '/dashboard');
+      // }
       router.push('/dashboard');
     } catch (error: any) {
       console.log(error);
