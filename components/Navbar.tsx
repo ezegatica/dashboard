@@ -43,9 +43,9 @@ export default function Navbar() {
       current: pathname === '/dashboard/ventas'
     },
     {
-      name: 'Logs',
-      href: '/dashboard/logs',
-      current: pathname?.startsWith('/dashboard/logs')
+      name: 'URLs',
+      href: '/dashboard/urls',
+      current: pathname?.startsWith('/dashboard/urls')
     },
     {
       name: 'Images',

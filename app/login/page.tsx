@@ -3,66 +3,49 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { User, IError } from '../types';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Toast from '@components/Toast';
 import Spinner from '@components/Spinner';
+import { loginUser } from './actions';
+
+export const dynamic = 'force-dynamic';
 
 export default function Login() {
+  // const searchParams = useSearchParams(); // https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
   const router = useRouter();
-  
-  const [user, setUser] = useState<User>({
-    email: '',
-    password: ''
-  });
-  
+
   const [error, setError] = useState<IError>({
     message: '',
     show: false
   });
-  
+
   const [loading, setLoading] = useState<boolean>(false);
-  
-  const login = async (e: any) => {
-    e.preventDefault();
-    const searchParams = useSearchParams();
+
+  const login = async (formData: FormData) => {
+    const user: User = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string
+    };
     setLoading(true);
     try {
-      const res = await fetch('/api/public/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user)
-      });
+      await loginUser(user);
 
-      
-      const json = await res.json();
-      
-      if (res.status !== 200) {
-        throw new Error(json.error);
-      }
-
-      if (searchParams?.has('next')) {
-        router.push(searchParams.get('next') || '/dashboard');
-        return;
-      }
+      // if (searchParams?.has('next')) {
+      //   return router.push(searchParams.get('next') || '/dashboard');
+      // }
       router.push('/dashboard');
     } catch (error: any) {
+      console.log(error);
       setError({ message: error.message, show: true });
     } finally {
       setLoading(false);
     }
   };
 
-  const onChange = (e: any) => {
-    if (error.show) {
-      hideError();
-    }
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
   const hideError = () => {
-    setError({ message: '', show: false });
+    if (error.show) {
+      setError({ message: '', show: false });
+    }
   };
 
   return (
@@ -83,7 +66,7 @@ export default function Login() {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={login}>
+            <form className="space-y-6" action={login} onChange={hideError}>
               <div>
                 <label
                   htmlFor="email"
@@ -97,7 +80,6 @@ export default function Login() {
                     name="email"
                     type="email"
                     autoComplete="email"
-                    onChange={onChange}
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -116,7 +98,6 @@ export default function Login() {
                     id="password"
                     name="password"
                     type="password"
-                    onChange={onChange}
                     autoComplete="current-password"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

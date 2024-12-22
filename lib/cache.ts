@@ -54,7 +54,6 @@ const getVentasURL = () => {
     case 'production':
       return 'https://ventas.ezegatica.com';
     default:
-      console.warn("No VERCEL_ENV entry found, using 'http://localhost:3000' > " + process.env.NEXT_PUBLIC_VERCEL_ENV)
       return 'http://localhost:3000';
   }
 };
