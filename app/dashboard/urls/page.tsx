@@ -14,6 +14,10 @@ export default async function VentasPage() {
   const items = await fetch(`${url}/api/url`, {
     headers: {
       Authorization: `Bearer ${token!.value}`
+    },
+    cache: 'no-store',
+    next: {
+      revalidate: 0
     }
   });
   const data = (await items.json()) as ShortURL[];
