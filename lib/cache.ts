@@ -6,11 +6,32 @@ export const revalidateRoot = async () => {
   const url = getVentasURL();
   console.info(`Revalidating root in ${url}`);
 
-  const res = await fetch(`${url}/api/revalidate?secret=${secret}`, {
+  const revalidateUrl = new URL(
+    `${url}/api/revalidate`
+  );
+  revalidateUrl.searchParams.append('secret', secret?.toString() || '');
+
+  const res = await fetch(revalidateUrl, {
     method: 'POST'
   });
-  const json = await res.json();
-  console.info({ res: json });
+  
+  if (!res.ok) {
+    console.error({ res });
+    if (res.body) {
+      const text = await res.text();
+      console.error({ res: text });
+    }
+    throw res;
+  }
+
+  if (res.headers.get('content-type')?.includes('application/json')) {
+    const json = await res.json();
+    console.info({ res: json });
+  } else {
+    const text = await res.text();
+    console.info({ res: text });
+  }
+
   return res;
 };
 
