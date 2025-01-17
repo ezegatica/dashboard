@@ -25,8 +25,19 @@ export const revalidatePath = async (path: string) => {
       method: 'POST'
     }
   );
-  const json = await res.json();
-  console.info({ res: json });
+
+  if (!res.ok) {
+    console.error({ res });
+    return res;
+  }
+
+  if (res.headers.get('content-type')?.includes('application/json')) {
+    const json = await res.json();
+    console.info({ res: json });
+  } else {
+    const text = await res.text();
+    console.info({ res: text });
+  }
 
   return res;
 };
