@@ -95,7 +95,8 @@ export default function UrlsTable({ items }: { items: ShortURL[] }) {
                         href={`${getShortenerURL()}/${item.name}`}
                         className="group flex items-center space-x-2.5 text-sm font-medium text-indigo-600 hover:text-indigo-900"
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noreferrer noopener"
+                        prefetch={false}
                       >
                         <LinkIcon
                           className="h-5 w-5 text-indigo-500 group-hover:text-indigo-900"
@@ -105,7 +106,7 @@ export default function UrlsTable({ items }: { items: ShortURL[] }) {
                       </Link>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {new Date(item.metadata.created).toLocaleString("es-AR")}
+                      {new Date(item.metadata?.created)?.toLocaleString("es-AR") || 'Unknown'}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {item.metadata.count}
