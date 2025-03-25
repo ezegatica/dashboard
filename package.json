@@ -19,9 +19,9 @@
     "@types/react-dom": "19.0.1",
     "@vercel/edge-config": "^0.2.1",
     "cookie": "^0.7.0",
-    "eslint": "8.36.0",
+    "eslint": "^8.57.1",
     "eslint-config-next": "15.0.4",
-    "next": "15.0.4",
+    "next": "^15.2.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "typescript": "5.0.2"
