@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   // Dashboard force login middleware
@@ -45,11 +45,27 @@ export async function middleware(request: NextRequest) {
 }
 
 const validateToken = async (token?: string): Promise<boolean> => {
-  const response = await fetch(`https://jesse.eze.net.ar/check`, {
+  // pasar a .env
+  const returnable = await fetch(`http://127.0.0.1:8787/validate`, {
     method: 'POST',
+    body: JSON.stringify({
+      token: token
+    }),
     headers: {
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     }
-  }).then(res => res.json());
-  return response.valid;
+  })
+    .then((res) => res.json())
+    .then((data: {valid: boolean}) => {
+      return data.valid;
+    })
+    .catch((err) => {
+      console.error(err);
+      return false;
+  })
+
+  console.log({returnable})
+
+  return returnable;
 };
