@@ -20,6 +20,21 @@ export const getAuthURL = () => {
   }
 };
 
+export const SSOUsersApiURLBase = `${getAuthURL()}/users`;
+export const SSOUsersRoutes = {
+  list: `${SSOUsersApiURLBase}/`
+} as const;
+export const BuildSSOUsersRoute = (endpoint: keyof typeof SSOUsersRoutes, token: string) => {
+  const fullURL = SSOUsersRoutes[endpoint];
+  const headers = new Headers();
+  headers.append('Authorization', `Bearer ${token}`);
+  headers.append('Content-Type', 'application/json');
+  return {
+    url: fullURL,
+    headers
+  }
+};
+
 export const buildSSOURL = (action: 'validate' | 'login' | 'logout' | 'revoke'): string => {
   const baseURL = getAuthURL();
   const appName = process.env.NEXT_PUBLIC_SSO_APP_NAME || 'dashboard';
@@ -27,6 +42,7 @@ export const buildSSOURL = (action: 'validate' | 'login' | 'logout' | 'revoke'):
   const returnURL = new URL(baseURL);
   returnURL.pathname = action;
   returnURL.searchParams.set('app', appName);
+  console.log({returnURL: returnURL.toString()})
   return returnURL.toString();
 }
 

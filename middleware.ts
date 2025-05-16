@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { getAuthURL } from './lib/urls';
+import { buildSSOURL, getAuthURL } from './lib/urls';
 
 export async function middleware(request: NextRequest) {
   // Dashboard force login middleware
@@ -46,7 +46,8 @@ export async function middleware(request: NextRequest) {
 }
 
 const validateToken = async (token: string): Promise<boolean> => {
-  const returnable = await fetch(`${getAuthURL()}/validate?app=dashboard-local`, {
+  const url = buildSSOURL('validate')
+  const returnable = await fetch(url, {
     method: 'POST',
     body: JSON.stringify({
       token
