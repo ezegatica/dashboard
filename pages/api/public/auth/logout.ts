@@ -16,7 +16,7 @@ export default async function handler(
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  await fetch(`${getAuthURL()}/revoke`, {
+  await fetch(`${getAuthURL()}/logout`, {
     method: 'POST',
     body: JSON.stringify({
       access_token: token
