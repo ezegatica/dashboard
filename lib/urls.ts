@@ -20,6 +20,16 @@ export const getAuthURL = () => {
   }
 };
 
+export const buildSSOURL = (action: 'validate' | 'login' | 'logout' | 'revoke'): string => {
+  const baseURL = getAuthURL();
+  const appName = process.env.NEXT_PUBLIC_SSO_APP_NAME || 'dashboard';
+  
+  const returnURL = new URL(baseURL);
+  returnURL.pathname = action;
+  returnURL.searchParams.set('app', appName);
+  return returnURL.toString();
+}
+
 export type ShortURL = {
     name: string;
     metadata: {
