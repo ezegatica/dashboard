@@ -1,7 +1,6 @@
 import React from 'react';
-import UrlsTable from './_components/UrlTable';
 import { cookies } from 'next/headers';
-import { BuildSSOUsersRoute, ShortURL, getShortenerURL } from '../../../lib/urls';
+import { BuildSSOUsersRoute, ShortURL } from '../../../lib/urls';
 
 export const revalidate = 0;
 export const preferredRegion = 'home';
