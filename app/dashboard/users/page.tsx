@@ -1,6 +1,7 @@
 import React from 'react';
 import { cookies } from 'next/headers';
-import { BuildSSOUsersRoute, ShortURL } from '../../../lib/urls';
+import { BuildSSOUsersRoute } from '../../../lib/urls';
+import UsersTable from './_components/UsersTable';
 
 export const revalidate = 0;
 export const preferredRegion = 'home';
@@ -16,12 +17,10 @@ export default async function VentasPage() {
     method: 'GET'
   })
 
-  const data = (await users.json()) as ShortURL[];
+  const data = (await users.json());
   return (
     <main>
-      <pre>
-        {JSON.stringify(data, null, 2)}
-      </pre>
+      <UsersTable items={data} token={token!.value} />
     </main>
   );
 }

@@ -22,7 +22,8 @@ export const getAuthURL = () => {
 
 export const SSOUsersApiURLBase = `${getAuthURL()}/users`;
 export const SSOUsersRoutes = {
-  list: `${SSOUsersApiURLBase}/`
+  list: `${SSOUsersApiURLBase}/`,
+  "change-role": `${SSOUsersApiURLBase}/:id/change-role`,
 } as const;
 export const BuildSSOUsersRoute = (endpoint: keyof typeof SSOUsersRoutes, token: string) => {
   const fullURL = SSOUsersRoutes[endpoint];
