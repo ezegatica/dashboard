@@ -1,11 +1,12 @@
-import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { buildSSOURL, getAuthURL } from './lib/urls';
 
 export async function middleware(request: NextRequest) {
   // Dashboard force login middleware
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (request.cookies.has('token')) {
-      const isValid = await validateToken(request.cookies.get('token')?.value);
+      const isValid = await validateToken(request.cookies.get('token')?.value!);
       if (isValid) {
         return NextResponse.next();
       } else {
@@ -25,7 +26,7 @@ export async function middleware(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/api/public')
   ) {
     if (request.cookies.has('token')) {
-      const isValid = await validateToken(request.cookies.get('token')?.value);
+      const isValid = await validateToken(request.cookies.get('token')?.value!);
       if (isValid) {
         return NextResponse.next();
       } else {
@@ -44,12 +45,28 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-const validateToken = async (token?: string): Promise<boolean> => {
-  const response = await fetch(`https://jesse.eze.net.ar/check`, {
+const validateToken = async (token: string): Promise<boolean> => {
+  const url = buildSSOURL('validate')
+  const returnable = await fetch(url, {
     method: 'POST',
+    body: JSON.stringify({
+      token
+    }),
     headers: {
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     }
-  }).then(res => res.json());
-  return response.valid;
+  })
+    .then((res) => res.json())
+    .then((data: {valid: boolean}) => {
+      return data.valid;
+    })
+    .catch((err) => {
+      console.error(err);
+      return false;
+  })
+
+  console.log({returnable})
+
+  return returnable;
 };

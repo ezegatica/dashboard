@@ -38,6 +38,11 @@ export default function Navbar() {
       current: pathname === '/dashboard'
     },
     {
+      name: 'Usuarios',
+      href: '/dashboard/users',
+      current: pathname?.startsWith('/dashboard/users')
+    },
+    {
       name: 'Ventas',
       href: '/dashboard/ventas',
       current: pathname === '/dashboard/ventas'
@@ -83,6 +88,7 @@ export default function Navbar() {
                             'rounded-md px-3 py-2 text-sm font-medium'
                           )}
                           aria-current={item.current ? 'page' : undefined}
+                          prefetch
                         >
                           {item.name}
                         </Link>

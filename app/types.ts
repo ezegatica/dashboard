@@ -18,3 +18,10 @@ export type LogsRequest = {
   totalLogs: number;
   perPage: number;
 }
+
+export type UserType = {
+  id: string;
+  email: string;
+  role: string;
+  loginMethod: 'google' | 'password';
+}
